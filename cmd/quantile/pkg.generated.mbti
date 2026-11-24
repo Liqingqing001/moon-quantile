@@ -1,0 +1,21 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Liqingqing001/moon_quantile/cmd/quantile"
+
+import {
+  "moonbitlang/core/json",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+#derive(@json.ToJson)
+type Report
+
+#derive(@json.FromJson)
+type Request
+
+// Type aliases
+
+// Traits

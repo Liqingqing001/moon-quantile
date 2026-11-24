@@ -1,0 +1,5 @@
+import {
+  "Liqingqing001/moon_quantile" @sketch,
+}
+
+pkgtype(kind: "executable")

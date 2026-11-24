@@ -1,0 +1,70 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Liqingqing001/moon_quantile"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "moonbitlang/core/sorted_map",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+#derive(@debug.Debug)
+pub struct Mapping {
+  alpha : Double
+  log_gamma : Double
+}
+pub fn Mapping::accuracy(Self) -> Double
+pub fn Mapping::key(Self, Double) -> Result[Int32, SketchError]
+pub fn Mapping::new(Double) -> Result[Self, SketchError]
+
+pub struct Sketch {
+  mapping : Mapping
+  capacity : Int32
+  positive : @sorted_map.SortedMap[Int32, Int64]
+  negative : @sorted_map.SortedMap[Int32, Int64]
+  mut zeros : Int64
+  mut total : Int64
+}
+pub fn Sketch::add(Self, Double, weight? : Int64) -> Result[Unit, SketchError]
+pub fn Sketch::bin_count(Self) -> Int32
+pub fn Sketch::count(Self) -> Int64
+pub fn Sketch::from_json_string(String, max_chars? : Int32) -> Result[Self, SketchError]
+pub fn Sketch::merge(Self, Self) -> Result[Unit, SketchError]
+pub fn Sketch::new(accuracy? : Double, capacity? : Int32) -> Result[Self, SketchError]
+pub fn Sketch::quantile(Self, Double) -> Result[Double?, SketchError]
+pub fn Sketch::quantiles(Self, ArrayView[Double]) -> Result[Array[Double?], SketchError]
+pub fn Sketch::restore(Snapshot) -> Result[Self, SketchError]
+pub fn Sketch::snapshot(Self) -> Snapshot
+pub fn Sketch::to_json_string(Self) -> String
+
+#derive(Eq, @debug.Debug)
+pub(all) enum SketchError {
+  InvalidAccuracy
+  InvalidCapacity
+  InvalidValue
+  InvalidWeight
+  InvalidQuantile
+  CapacityExceeded
+  CountOverflow
+  IncompatibleConfig
+  InvalidSnapshot
+}
+
+#derive(Eq, @debug.Debug, @json.FromJson, @json.ToJson)
+pub(all) struct Snapshot {
+  version : Int32
+  accuracy : Double
+  capacity : Int32
+  positive : Array[(Int32, Int64)]
+  negative : Array[(Int32, Int64)]
+  zeros : Int64
+  total : Int64
+}
+
+// Type aliases
+
+// Traits

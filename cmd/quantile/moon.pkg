@@ -1,0 +1,7 @@
+import {
+  "Liqingqing001/moon_quantile" @sketch,
+  "moonbitlang/core/env",
+  "moonbitlang/core/json",
+}
+
+pkgtype(kind: "executable")
