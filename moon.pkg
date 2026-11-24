@@ -1,4 +1,5 @@
 import {
   "moonbitlang/core/math",
   "moonbitlang/core/sorted_map",
+  "moonbitlang/core/json",
 }
