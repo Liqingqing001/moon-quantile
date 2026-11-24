@@ -12,9 +12,19 @@ struct Request {
 struct Report {
   count : Int64
   bins : Int32
-  estimates : Array[Double?]
-  merged_estimates : Array[Double?]
-  restored_estimates : Array[Double?]
+  estimates : Array[Json]
+  merged_estimates : Array[Json]
+  restored_estimates : Array[Json]
+}
+
+///|
+fn json_values(values : Array[Double?]) -> Array[Json] {
+  values.map(fn(value) {
+    match value {
+      Some(x) => @json.to_json(x)
+      None => @json.null
+    }
+  })
 }
 
 ///|
@@ -24,14 +34,27 @@ fn fail() -> Unit {
 }
 
 ///|
+#cfg(target="js")
+fn argument_offset() -> Int32 {
+  2
+}
+
+///|
+#cfg(not(target="js"))
+fn argument_offset() -> Int32 {
+  1
+}
+
+///|
 fn main {
   let args = @env.args()
-  if args.length() != 2 {
+  let offset = argument_offset()
+  if args.length() != offset + 1 {
     fail()
     return
   }
   let request : Request = @json.from_json(
-    @json.parse(args[1], max_nesting_depth=8, reject_duplicate_keys=true),
+    @json.parse(args[offset], max_nesting_depth=8, reject_duplicate_keys=true),
   ) catch {
     _ => {
       fail()
@@ -81,9 +104,9 @@ fn main {
   let report : Report = {
     count: s.count(),
     bins: s.bin_count(),
-    estimates,
-    merged_estimates: a.quantiles(qs).unwrap(),
-    restored_estimates: restored.quantiles(qs).unwrap(),
+    estimates: json_values(estimates),
+    merged_estimates: json_values(a.quantiles(qs).unwrap()),
+    restored_estimates: json_values(restored.quantiles(qs).unwrap()),
   }
   println(@json.to_json(report).stringify())
 }
