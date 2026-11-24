@@ -1,0 +1,33 @@
+name: verify
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official MoonBit toolchain
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh -o /tmp/install-moonbit.sh
+          bash /tmp/install-moonbit.sh
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Check, build and test backends
+        run: |
+          moon version --all
+          moon fmt --check
+          moon check
+          moon build
+          moon test
+          moon test --target wasm-gc
+          moon test --target js
+          moon build --target js
+          moon run cmd/demo
+      - name: Independent exact-sort oracle
+        run: python tests/differential.py

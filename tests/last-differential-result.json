@@ -1,0 +1,11 @@
+{
+  "seed": 20261124,
+  "datasets": 20,
+  "accuracy_settings": 5,
+  "quantile_checks": 1200,
+  "merge_and_restore_cases": 100,
+  "invalid_cli_cases": 3,
+  "max_error_divided_by_alpha": 0.9992905400737939,
+  "oracle": "Python exact sort, floor(q*(n-1))",
+  "status": "passed"
+}
